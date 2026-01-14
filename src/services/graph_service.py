@@ -46,7 +46,7 @@ class GraphDBService:
     def push_image_node(self, node: ImageNode):
         sum_key = int(
             round(node.sum)
-        )  # <- если у тебя всегда int, можно просто int(node.sum)
+        )  
 
         with self.driver.session() as session:
             session.run(

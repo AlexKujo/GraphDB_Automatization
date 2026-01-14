@@ -14,7 +14,6 @@ class TableController:
         self.current_sum = None
         self.image_generated = False
         self.image_node = None
-        # Переиспользуем экземпляры сервисов для оптимизации
         self._graph_service = None
         self._image_gen = None
 
@@ -42,7 +41,7 @@ class TableController:
         if not self.is_table_loaded() or self.analyzer is None:
             return []
 
-        dates = self.analyzer.dates.dropna()  # Убираем NaT
+        dates = self.analyzer.dates.dropna() 
         return [str(d) for d in sorted(dates)]
 
     def get_sum_for_period(self, date_from: str, date_to: str) -> int:
@@ -74,7 +73,6 @@ class TableController:
         if image_path is None:
             raise ValueError("Не удалось сгенерировать изображение")
 
-        # Создаем ImageNode
         self.image_node = ImageNode(
             sum=self.current_sum,
             period_start=date_from,
@@ -108,7 +106,7 @@ class TableController:
         if not self.image_generated or self.image_node is None:
             raise ValueError("Сначала сгенерируйте изображение")
 
-        self.push_to_neo4j()  # Убедимся, что текущий узел в базе
+        self.push_to_neo4j()  
 
         if self._graph_service is None:
             self._graph_service = GraphDBService()

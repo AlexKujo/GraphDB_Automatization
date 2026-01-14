@@ -41,7 +41,6 @@ class ImageGen:
             response = requests.post(self.url, headers=self.headers, json=data)
             response.raise_for_status()
 
-            # Сохраняем изображение
             result = response.json()
             image_url = result["choices"][0]["message"]["images"][0]["image_url"]["url"]
             image_bytes = base64.b64decode(image_url.split(",")[1])
@@ -62,7 +61,7 @@ class ImageGen:
         """Возвращает путь к сгенерированному изображению"""
         if self.image_path is None:
             raise ValueError("Изображение не сгенерировано")
-        return self.image_path  # Замените на реальный путь после генерации
+        return self.image_path  
 
 
 # # Использование

@@ -9,7 +9,7 @@ class TableUI:
     def __init__(self):
         self.window = tk.Tk()
         self.window.title("Table Manager")
-        self.window.geometry("600x400")
+        self.window.geometry("1020x800")
         
         self.controller = TableController()
         self._ui_create_widgets()
@@ -31,19 +31,18 @@ class TableUI:
         self.sheet_id_entry = ttk.Entry(frame, width=40)
         self.sheet_id_entry.pack(side="left", padx=5)
         
-        # Добавляем поддержку Ctrl+V для вставки
-        self.sheet_id_entry.bind('<Control-v>', self._paste_to_entry)
+        # self.sheet_id_entry.bind('<Control-v>', self._paste_to_entry)
         
         ttk.Button(frame, text="Загрузить", command=self._load_google_sheets).pack(side="left")
     
-    def _paste_to_entry(self, event):
-        """Вставляет текст из буфера обмена в поле ввода"""
-        try:
-            text = self.window.clipboard_get()
-            self.sheet_id_entry.insert(tk.INSERT, text)
-        except tk.TclError:
-            pass  # Буфер пуст
-        return "break"  # Предотвращает дальнейшую обработку события
+    # def _paste_to_entry(self, event):
+    #     """Вставляет текст из буфера обмена в поле ввода"""
+    #     try:
+    #         text = self.window.clipboard_get()
+    #         self.sheet_id_entry.insert(tk.INSERT, text)
+    #     except tk.TclError:
+    #         pass  
+    #     return "break"  
     
     def _ui_create_excel_section(self):
         """Секция для загрузки из Excel"""
@@ -53,7 +52,6 @@ class TableUI:
         self.excel_path_label = ttk.Label(frame, text="Файл не выбран")
         self.excel_path_label.pack(side="left", padx=5)
         
-        # ttk.Button(frame, text="Выбрать файл", command=self._select_excel_file).pack(side="left")
         ttk.Button(frame, text="Выбрать файл", command=self._load_excel).pack(side="left", padx=5)
     
     def _ui_create_date_selection_section(self):
@@ -164,7 +162,7 @@ class TableUI:
         try:
             self.controller.try_generate_image(date_from, date_to)
             self.send_button.config(state="normal")
-            self._add_info(f"Изображение {self.controller.get_image_name()} сгенерировано")
+            self._add_info(f"Изображение {self.controller.get_image_name().split(os.sep)[-1]} сгенерировано")
         except Exception as e:
             messagebox.showerror("Ошибка", f"Не удалось сгенерировать изображение: {e}")
     
@@ -187,13 +185,14 @@ class TableUI:
         """Ищет похожие изображения"""
         try:
             results = self.controller.search_similar_images()
+            self._add_info(f"Изображение {self.controller.get_image_name().split(os.sep)[-1]} было добавлено в БД: ")
             if not results:
                 self._add_info("Похожие изображения не найдены")
                 return
             
             self._add_info("Похожие изображения:")
             for res in results:
-                self._add_info(f"Path: {res['image_path']}, Sum: {res['sum']}")
+                self._add_info(f"Путь: {res['image_path']}, Число: {res['sum']}")
         except Exception as e:
             messagebox.showerror("Ошибка", f"Не удалось найти похожие изображения: {e}")
     

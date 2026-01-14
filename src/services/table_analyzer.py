@@ -1,13 +1,10 @@
 import pandas as pd
 from datetime import date
 
-# Импорты GoogleSheetsReader и ExcelReader используются только в блоке __main__
-# поэтому оставляем их там
 
 class TableAnalyzer:
     def __init__(self, df: pd.DataFrame):
         self.df = df
-        # self._validate_dataframe()
     
     @property
     def dates(self):
@@ -25,8 +22,7 @@ class TableAnalyzer:
         return (min(valid_dates), max(valid_dates))
     
     def sum_by_period(self, date_from: date, date_to: date) -> int:
-        # date_from_parsed = datetime.strptime(date_from,DATE_FORMAT)
-        # date_to_parsed = datetime.strptime(date_to,DATE_FORMAT)
+        """Вычисляет сумму за период [date_from, date_to]"""
         mask = (self.dates >= date_from) & (self.dates <= date_to)
         return int(self.values[mask].sum())
     
@@ -37,8 +33,8 @@ class TableAnalyzer:
 #     from src.services.table_reader import ExcelReader
     
 #     # reader = GoogleSheetsReader(
-#     #     cred_path='googlesheets_credentials.json',
-#     #     sheet_id='1p8PaZ8cDcrEUkDMrzJ8_gEVMSqD_7ruDw_wAEzXkZZo'
+#     #     cred_path='',
+#     #     sheet_id=''
 #     # )
 #     reader = ExcelReader(file_path=r"data\test_table.xlsx")
 #     df = reader.read()
